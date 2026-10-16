@@ -20,7 +20,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"path/filepath"
-        "strings"
+	"strings"
 	"time"
 
 	"github.com/cbomkit/cbomkit-theia/scanner/errors"

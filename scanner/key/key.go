@@ -59,8 +59,10 @@ func GenerateCdxComponent(key any) (*cdx.Component, error) {
 		return getRSAPrivateKeyComponent(key), nil
 	case *ecdsa.PrivateKey:
 		return getECDSAPrivateKeyComponent(key), nil
+	case *ed25519.PrivateKey:
+		return getED25519PrivateKeyComponent("OpenSSH"), nil
 	case ed25519.PrivateKey:
-		return getED25519PrivateKeyComponent(), nil
+		return getED25519PrivateKeyComponent(""), nil
 	case *ecdh.PrivateKey:
 		return getECDHPrivateKeyComponent(), nil
 	default:
@@ -147,9 +149,15 @@ func getED25519PublicKeyComponent(key *ed25519.PublicKey) *cdx.Component {
 	return c
 }
 
-func getED25519PrivateKeyComponent() *cdx.Component {
+func getED25519PrivateKeyComponent(format string) *cdx.Component {
 	c := getGenericPrivateKeyComponent()
 	c.Name = "ED25519"
+	c.CryptoProperties.RelatedCryptoMaterialProperties.AlgorithmRef = "crypto/algorithm/ed25519"
+	p := c.CryptoProperties.RelatedCryptoMaterialProperties
+	p.AlgorithmRef = "crypto/algorithm/ed25519"
+	if format != "" {
+		p.Format = format
+	}
 	return c
 }
 
